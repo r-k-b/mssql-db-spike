@@ -20,6 +20,15 @@ in with pkgs; p3p.buildPythonPackage {
 
   dontUsePythonRecompileBytecode = true;
 
+#  installPhase = ''
+#    echo runHook preInstall
+#    echo =============================installphase
+#    echo mkdir -p $out/mssqltoolsservice/bin
+#  '';
+#    tar -xzf sqltoolsservice/manylinux1/Microsoft.SqlTools.ServiceLayer-linux-x64-netcoreapp2.1.tar.gz \
+#      -C $out/mssqltoolsservice/bin
+#  '';
+
   propagatedBuildInputs = with p3p; [ bash future ];
 
   meta = {
