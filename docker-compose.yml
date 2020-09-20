@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+    db:
+        image: mcr.microsoft.com/mssql/server:2019-CU6-ubuntu-16.04
+        networks:
+            - net
+        ports:
+            # Pass environment variables with the same names to docker-compose
+            # or `./up.sh` to override these defaults. For more info, see:
+            # https://docs.docker.com/compose/compose-file/#variable-substitution
+            - 1433:1433
+        environment:
+            ACCEPT_EULA: 'Y'
+            SA_PASSWORD: Abcd1234
+
+
+networks:
+    net:
