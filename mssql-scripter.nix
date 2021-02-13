@@ -1,7 +1,9 @@
 { pkgs }:
-let version = "1.0.0a23";
- p3p = pkgs.python3Packages;
-in with pkgs; p3p.buildPythonPackage {
+let
+  version = "1.0.0a23";
+  p3p = pkgs.python3Packages;
+in with pkgs;
+p3p.buildPythonApplication {
   pname = "mssql-scripter";
   inherit version;
 
@@ -12,30 +14,25 @@ in with pkgs; p3p.buildPythonPackage {
     sha256 = "0xb4yhqizsdbfrg5hh96phb4ghxrzln3kkkblbkvqah05jrk2cm6";
   };
 
-  checkInputs = with p3p; [ pytest ];
+  propagatedBuildInputs = with p3p; [ future ];
 
-  checkPhase = ''
-    pytest
+  checkPhase = "exit 0";
+
+  installPhase = ''
+    mkdir -p ./temp-home
+    export HOME=./temp-home
+    mkdir -p "$out"/{bin,src}
+    cp -R * $out/src
+
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/mssql-scripter \
+      --set PYTHONPATH "$PYTHONPATH:$out/src" \
+      --add-flags "-O $out/src/mssqlscripter/main.py"
   '';
-
-  dontUsePythonRecompileBytecode = true;
-
-#  installPhase = ''
-#    echo runHook preInstall
-#    echo =============================installphase
-#    echo mkdir -p $out/mssqltoolsservice/bin
-#  '';
-#    tar -xzf sqltoolsservice/manylinux1/Microsoft.SqlTools.ServiceLayer-linux-x64-netcoreapp2.1.tar.gz \
-#      -C $out/mssqltoolsservice/bin
-#  '';
-
-  propagatedBuildInputs = with p3p; [ bash future ];
 
   meta = {
     homepage = "https://github.com/Microsoft/mssql-scripter/";
     description = "Microsoft SQL Scripter Command-Line Tool";
     license = lib.licenses.mit;
-    #maintainers = with lib.maintainers; [ rkb ];
   };
 }
 
