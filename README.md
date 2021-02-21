@@ -15,9 +15,22 @@ Scripting request: 1 encountered error: Scripting request encountered a exceptio
 Error details: ('End of stream reached, no output.',)
 ```
 
-will something like `strace -ff -tt sh -c 'result/bin/mssqlscripter -S foo' 1>strace_combined.txt 2>&1` help? 
+Q: will something like `strace -ff -tt sh -c 'result/bin/mssqlscripter -S foo' 1>strace_combined.txt 2>&1` help?
 
-do we need to extract the tar files during the buildPhase or installPhase?
+A: Yep, searched for `libssl` in that text, saw it was looking for `libssl.so.1.0.2` in a bunch of places, while we're
+supplying `libssl.so.1.1`.
+
+Looks like there's an open issue for this against the scripter:
+<https://github.com/microsoft/mssql-scripter/issues/236>
+
+Should we drop the included sqltools binaries, build them ourselves? Will that fix it?
+<https://microsoft.github.io/sqltoolssdk/guide/building_sqltoolsservice.html>
+
+Or should we give in, allow it to have the unsafe OpenSSL 1.0.2?
+
+---
+
+Q: do we need to extract the tar files during the buildPhase or installPhase?
 
 
 # debugging
