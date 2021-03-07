@@ -4,7 +4,7 @@ let
   p3p = pkgs.python3Packages;
   inherit (pkgs)
     at-spi2-atk at-spi2-core atomEnv curl fetchFromGitHub icu kerberos lib
-    libunwind libuuid makeWrapper openssl stdenv zlib;
+    libunwind libuuid makeWrapper openssl_1_0_2 stdenv zlib;
 
   edition = "mssql-scripter";
   targetPath = "$out/${edition}";
@@ -14,7 +14,7 @@ let
     icu
     libunwind
     libuuid
-    openssl
+    openssl_1_0_2
     stdenv.cc.cc
     zlib
   ];
